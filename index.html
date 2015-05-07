@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>FormReader & Validator</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+    <form id="form" method="post" action="" autocomplete="off">
+        <h1>Try to fill</h1>
+        <fieldset id="message"></fieldset>
+        <fieldset class="errors"></fieldset>
+        <fieldset class="signup">
+            <input type='text' placeholder='First:'>
+            <input type='text' placeholder='Last:'>
+            <input type='text' placeholder='Email:'>
+            <input type='text' placeholder='Phone:'>
+            <input type='submit' placeholder='SUBMIT' value="Submit">
+        </fieldset>
+    </form>
+    <script>
+        $(document).ready(function(){
+            $('#form').submit(function(){
+                console.log($(this).serializeArray());
+            });
+        });
+    </script>
+</body>
+</html>
