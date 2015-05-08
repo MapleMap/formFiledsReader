@@ -7,23 +7,26 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
-    <form id="form" method="post" action="" autocomplete="off">
-        <h1>Try to fill</h1>
-        <fieldset id="message"></fieldset>
+    <form id="form" method="post" action="" autocomplete="off" class="clear-fix">
+        <h2>Form with all required fields</h2>
         <fieldset class="errors"></fieldset>
+        <fieldset class="message">*all fileds are required</fieldset>
         <fieldset class="signup">
-            <input type='text' placeholder='First:'>
-            <input type='text' placeholder='Last:'>
-            <input type='text' placeholder='Email:'>
-            <input type='text' placeholder='Phone:'>
+            <input type='text' name="firstName" placeholder='First:'>
+            <input type='text' name="lastName" placeholder='Last:'>
+            <input type='text' name="email" placeholder='Email:'>
+            <input type='text' name="phone" placeholder='Phone:'>
+            <input type='text' name="skype" placeholder='Skype:'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
+        </fieldset>
+        <fieldset class="code-review">
+            <div>Module initialization: <code class="sendData">{}</code></div>
+            <div>sendData: <code class="sendData">{}</code></div>
         </fieldset>
     </form>
     <script>
         $(document).ready(function(){
-            $('#form').submit(function(){
-                console.log($(this).serializeArray());
-            });
+
         });
     </script>
 </body>
