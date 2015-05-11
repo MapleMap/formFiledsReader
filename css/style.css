@@ -71,13 +71,27 @@ form .errors {
   color: #fe4c4c;
 }
 form .code-review {
-  color: black;
+  color: #808080;
   text-align: left;
   padding: 10px 20px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   border: 1px dashed #808080;
+}
+form .code-review .send-data {
+  color: black;
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+}
+form .code-review .init h2 {
+  margin: 10px 0;
+}
+form .code-review .init pre {
+  width: 60%;
+  text-align: left;
+  margin: 0 0 0 -30px;
 }
 form .code-review .comment {
   color: rgba(0, 0, 0, 0.4);
