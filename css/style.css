@@ -79,6 +79,23 @@ form .code-review {
   border-radius: 4px;
   border: 1px dashed #808080;
 }
+form .code-review .send-data {
+  display: block;
+  text-align: center;
+  color: #808080;
+  margin-top: 10px;
+}
+form .code-review .init h2 {
+  margin: 10px 0;
+}
+form .code-review .init pre {
+  width: 60%;
+  text-align: left;
+  margin: 0 0 0 -30px;
+}
+form .code-review .send-data {
+  color: #808080;
+}
 form .code-review .comment {
   color: rgba(0, 0, 0, 0.4);
 }
