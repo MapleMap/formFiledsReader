@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>FormReader & Validator</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./bower_components/animate-css/animate.min.css">
+    <link rel="stylesheet" href="./helpers/highlight/highlight.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+
 </head>
 <body>
-    <form id="form" method="post" action="" autocomplete="off" class="clear-fix">
+    <form id="formOne" method="post" action="" autocomplete="off" class="clear-fix">
         <h2>Form with all required fields</h2>
         <fieldset class="errors"></fieldset>
         <fieldset class="message">*all fileds are required</fieldset>
@@ -20,14 +24,78 @@
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div>Module initialization: <code class="sendData">{}</code></div>
-            <div>sendData: <code class="sendData">{}</code></div>
+            <div class="init">Usage:
+<pre>
+    <code class="js">
+        $('form').submit(function(){
+            Validation.requiredFields = ['firstName', 'lastName', 'email', 'phone', 'skype'];
+
+            if(!Validation.check('#formOne')) return;
+                //your code
+                //console.log(Validation.sendData);
+            }
+        });
+    </code>
+</pre>
+            </div>
+            <div>Output Data:
+                <code class="send-data">{}</code>
+            </div>
+        </fieldset>
+    </form>
+
+    <form id="formTwo" method="post" action="" autocomplete="off" class="clear-fix">
+        <h2>Form with some required fields</h2>
+        <fieldset class="errors"></fieldset>
+        <fieldset class="message"></fieldset>
+        <fieldset class="signup">
+            <input type='text' name="firstName" placeholder='First:'>
+            <input type='text' name="lastName" placeholder='Last:'>
+            <input type='text' name="email" placeholder='Email:*'>
+            <input type='text' name="phone" placeholder='Phone:*'>
+            <input type='text' name="skype" placeholder='Skype:*'>
+            <input type='submit' placeholder='SUBMIT' value="Submit">
+        </fieldset>
+        <fieldset class="code-review">
+            <div class="init">Usage:
+<pre>
+    <code class="js">
+        $('form').submit(function(){
+            if(!Validation.check('#formOne')) return;
+                //your code
+                console.log(Validation.sendData);
+            }
+        });
+    </code>
+</pre>
+            </div>
+            <div>Output Data:
+                <code class="send-data">{}</code>
+            </div>
         </fieldset>
     </form>
     <script>
         $(document).ready(function(){
+            $('form').submit(function(e){
+                e.preventDefault();
+            });
 
+
+            $('#formOne').submit(function(){
+                Validation.requiredFields = ['firstName', 'lastName', 'email', 'phone', 'skype'];
+                if(Validation.check('#formOne', 'form')){
+                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
+                }
+            });
+
+            $('#formTwo').submit(function(){
+                if(Validation.check('#formOne')){
+                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
+                }
+            });
         });
     </script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="./js/validation.js"></script>
 </body>
 </html>
