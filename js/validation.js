@@ -14,36 +14,46 @@ var Validation = (function(){
     check = function(formID, callback){
         settings.$form = $(formID);
 
-        visualize.clearErrors();
+        Visualize.clearErrors();
+        getFormData();
         start();
 
         if(!errors.length){
-            visualize.clearErrors();
+            Visualize.clearErrors();
             if (callback && typeof(callback) === "function") callback();
             return true;
         } else {
-            visualize.showErrors();
+            Visualize.showErrors();
             return false;
         }
     },
 
-    start = function(){
-        var formArray = settings.$form.find("[data-validate]");
+    getFormData = function(){
+        var formDataArray = settings.$form.serializeArray();
 
-        for(var i=0; i < formArray.length; i++){
-            sendData[formArray[i].getAttribute('data-validate')] = formArray[i]['value'];
+        for(var i=0; i < formDataArray.length; i++){
+            sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
         }
-        for(var key in sendData){
-            if (validate[key] !== undefined) {
-                var result = validate[key]( sendData[key] );
-                if(!result) visualize.init(key);
+    },
+
+    start = function(){
+        var validateArray = settings.$form.find("[data-validate]"),
+            requireData = {};
+
+        for(var i=0; i < validateArray.length; i++){
+            requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
+        }
+        for(var key in requireData){
+            if (Validate[key] !== undefined) {
+                var result = Validate[key]( requireData[key] );
+                if(!result) Visualize.init(key);
             } else {
                 console.log('Validate  method \''+ key +'\' doesn\'t exist')
             }
         }
     },
 
-    validate = {
+    Validate = {
 
         email: function(email){
             return (!regExp.mail.test(email)) ? false : true;
@@ -68,14 +78,13 @@ var Validation = (function(){
         }
     },
 
-    visualize = {
+    Visualize = {
 
         init: function(field){
-            (visualize[field] !== undefined) ? visualize[field]() : console.log('Visualize  method \''+ field +'\' doesn\'t exist');
+            (Visualize[field] !== undefined) ? Visualize[field]() : console.log('Visualize  method \''+ field +'\' doesn\'t exist');
 
-            visualize.showErrors();
-            //visualize.removeErrorClass();
-            visualize.addErrorClass(field);
+            Visualize.showErrors();
+            Visualize.addErrorClass(field);
         },
 
         email: function(){
@@ -117,7 +126,7 @@ var Validation = (function(){
         clearErrors: function() {
             errors = [];
             settings.$form.find('.errors').html('');
-            visualize.clearErrorClass();
+            Visualize.clearErrorClass();
         }
     };
 
