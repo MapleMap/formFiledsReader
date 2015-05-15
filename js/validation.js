@@ -75,6 +75,10 @@ var Validation = (function(){
 
         lastName: function(lastName){
             return (lastName.length < 3) ? false : true;
+        },
+
+        country: function(country){
+            return (country == 'Choose country*') ? false : true;
         }
     },
 
@@ -105,6 +109,10 @@ var Validation = (function(){
 
         lastName: function(){
             errors.push('A lastName is required');
+        },
+
+        country: function(){
+            errors.push('Country must be selected');
         },
 
         showErrors: function(){
