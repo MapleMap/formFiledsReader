@@ -16,19 +16,30 @@
         <fieldset class="errors"></fieldset>
         <fieldset class="message">*all fileds are required</fieldset>
         <fieldset class="signup">
-            <input type='text' name="firstName" placeholder='First:'>
-            <input type='text' name="lastName" placeholder='Last:'>
-            <input type='text' name="email" placeholder='Email:'>
-            <input type='text' name="phone" placeholder='Phone:'>
-            <input type='text' name="skype" placeholder='Skype:'>
+            <input type='text' name="firstName" data-validate="firstName1" placeholder='First:'>
+            <input type='text' name="lastName" data-validate="lastName" placeholder='Last:'>
+            <input type='text' name="email" data-validate="email" placeholder='Email:'>
+            <input type='text' name="phone" data-validate="phone" placeholder='Phone:'>
+            <input type='text' name="skype" data-validate="skype" placeholder='Skype:'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div class="init">Usage:
+            <div class="init">HTML:
+<pre>
+    <code class="html">
+        ...
+        &lt;input type='text' name="lastName" data-validate="lastName" placeholder='Last:'&gt;
+        &lt;input type='text' name="email" data-validate="email" placeholder='Email:'&gt;
+        &lt;input type='text' name="phone" data-validate="phone" placeholder='Phone:'&gt;
+        &lt;input type='text' name="skype" data-validate="skype" placeholder='Skype:'&gt;
+        ...
+    </code>
+</pre>
+            </div>
+            <div class="init">JS:
 <pre>
     <code class="js">
         $('form').submit(function(){
-            Validation.requiredFields = ['firstName', 'lastName', 'email', 'phone', 'skype'];
 
             if(!Validation.check('#formOne')) return;
                 //your code
@@ -51,9 +62,9 @@
         <fieldset class="signup">
             <input type='text' name="firstName" placeholder='First:'>
             <input type='text' name="lastName" placeholder='Last:'>
-            <input type='text' name="email" placeholder='Email:*'>
-            <input type='text' name="phone" placeholder='Phone:*'>
-            <input type='text' name="skype" placeholder='Skype:*'>
+            <input type='text' name="email" data-validate="email" placeholder='Email:*'>
+            <input type='text' name="phone" data-validate="phone" placeholder='Phone:*'>
+            <input type='text' name="skype" data-validate="skype" placeholder='Skype:*'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
@@ -82,10 +93,7 @@
 
 
             $('#formOne').submit(function(){
-                Validation.requiredFields = ['firstName', 'lastName', 'email', 'phone', 'skype'];
-                if(Validation.check('#formOne', 'form')){
-                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
-                }
+                Validation.check('#formOne');
             });
 
             $('#formTwo').submit(function(){
