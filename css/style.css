@@ -93,6 +93,10 @@ form .code-review .init pre {
   text-align: left;
   margin: 0 0 0 -30px;
 }
+form .code-review .result {
+  width: 430px;
+  word-wrap: break-word;
+}
 form .code-review .comment {
   color: rgba(0, 0, 0, 0.4);
 }
