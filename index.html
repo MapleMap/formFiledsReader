@@ -5,7 +5,7 @@
     <title>FormReader & Validator</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./bower_components/animate-css/animate.min.css">
-    <link rel="stylesheet" href="./helpers/highlight/highlight.css">
+    <link rel="stylesheet" href="vendors/highlight/highlight.css">
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
 
@@ -16,19 +16,36 @@
         <fieldset class="errors"></fieldset>
         <fieldset class="message">*all fileds are required</fieldset>
         <fieldset class="signup">
-            <input type='text' name="firstName" placeholder='First:'>
-            <input type='text' name="lastName" placeholder='Last:'>
-            <input type='text' name="email" placeholder='Email:'>
-            <input type='text' name="phone" placeholder='Phone:'>
-            <input type='text' name="skype" placeholder='Skype:'>
+            <input type='text' name="firstName" data-validate="firstName" placeholder='First:'>
+            <input type='text' name="lastName" data-validate="lastName" placeholder='Last:'>
+            <input type='text' name="email" data-validate="email" placeholder='Email:'>
+            <input type='text' name="phone" data-validate="phone" placeholder='Phone:'>
+            <input type='text' name="skype" data-validate="skype" placeholder='Skype:'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div class="init">Usage:
+            <div class="init">HTML:
+<pre>
+    <code class="html">
+        &lt;form&gt;
+            ...
+            &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
+            &lt;fieldset&gt;
+                &lt;input ... data-validate="firstName" ... &gt;
+                &lt;input ... data-validate="lastName" ... &gt;
+                &lt;input ... data-validate="email" ... &gt;
+                &lt;input ... data-validate="phone" ... &gt;
+                &lt;input ... data-validate="skype" ... &gt;
+            &lt;/fieldset&gt;
+            ...
+        &lt;/form&gt;
+    </code>
+</pre>
+            </div>
+            <div class="init">JS:
 <pre>
     <code class="js">
         $('form').submit(function(){
-            Validation.requiredFields = ['firstName', 'lastName', 'email', 'phone', 'skype'];
 
             if(!Validation.check('#formOne')) return;
                 //your code
@@ -38,7 +55,7 @@
     </code>
 </pre>
             </div>
-            <div>Output Data:
+            <div class="result">Output Data:
                 <code class="send-data">{}</code>
             </div>
         </fieldset>
@@ -51,25 +68,44 @@
         <fieldset class="signup">
             <input type='text' name="firstName" placeholder='First:'>
             <input type='text' name="lastName" placeholder='Last:'>
-            <input type='text' name="email" placeholder='Email:*'>
-            <input type='text' name="phone" placeholder='Phone:*'>
-            <input type='text' name="skype" placeholder='Skype:*'>
+            <input type='text' name="email" data-validate="email" placeholder='Email:*'>
+            <input type='text' name="phone" data-validate="phone" placeholder='Phone:*'>
+            <input type='text' name="skype" data-validate="skype" placeholder='Skype:*'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div class="init">Usage:
+            <div class="init">HTML:
+<pre>
+    <code class="html">
+        &lt;form&gt;
+            ...
+            &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
+                &lt;fieldset&gt;
+                &lt;input ... data-validate="firstName" ... &gt;
+                &lt;input ... data-validate="lastName" ... &gt;
+                &lt;input ... data-validate="email" ... &gt;
+                &lt;input ... data-validate="phone" ... &gt;
+                &lt;input ... data-validate="skype" ... &gt;
+            &lt;/fieldset&gt;
+            ...
+        &lt;/form&gt;
+    </code>
+</pre>
+            </div>
+            <div class="init">JS:
 <pre>
     <code class="js">
         $('form').submit(function(){
-            if(!Validation.check('#formOne')) return;
-                //your code
-                console.log(Validation.sendData);
-            }
+
+        if(!Validation.check('#formOne')) return;
+            //your code
+            //console.log(Validation.sendData);
+        }
         });
     </code>
 </pre>
             </div>
-            <div>Output Data:
+            <div class="result">Output Data:
                 <code class="send-data">{}</code>
             </div>
         </fieldset>
@@ -82,15 +118,14 @@
 
 
             $('#formOne').submit(function(){
-                Validation.requiredFields = ['firstName', 'lastName', 'email', 'phone', 'skype'];
-                if(Validation.check('#formOne', 'form')){
+                if(Validation.check('#formOne')) {
                     $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
                 }
             });
 
             $('#formTwo').submit(function(){
-                if(Validation.check('#formOne')){
-                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
+                if(Validation.check('#formTwo')){
+                    $('#formTwo').find('.send-data').text(JSON.stringify(Validation.sendData));
                 }
             });
         });
