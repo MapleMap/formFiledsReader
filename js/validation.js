@@ -1,7 +1,7 @@
 "use strict";
 
 var Validation = (function(){
-    var settings ={
+    var settings = {
             $form: false
         },
         errors = [],
@@ -19,13 +19,12 @@ var Validation = (function(){
 
         if(!errors.length){
             visualize.clearErrors();
+            if (callback && typeof(callback) === "function") callback();
             return true;
         } else {
             visualize.showErrors();
             return false;
         }
-
-        if (callback && typeof(callback) === "function") callback();
     },
 
     start = function(){
@@ -35,62 +34,70 @@ var Validation = (function(){
             sendData[formArray[i].getAttribute('data-validate')] = formArray[i]['value'];
         }
         for(var key in sendData){
-            (validate[key] !== undefined) ? validate[key]( sendData[key] ) : console.log('Validate  method \''+ key +'\' doesn\'t exist');
+            if (validate[key] !== undefined) {
+                var result = validate[key]( sendData[key] );
+                if(!result) visualize.init(key);
+            } else {
+                console.log('Validate  method \''+ key +'\' doesn\'t exist')
+            }
         }
     },
 
     validate = {
 
         email: function(email){
-            if (!regExp.mail.test(email)) {
-                errors.push('Email must be a valid');
-                visualize.addErrorClass('email');
-            } else {
-                visualize.removeErrorClass('email');
-            }
+            return (!regExp.mail.test(email)) ? false : true;
         },
 
         phone: function(phone){
-            if (phone.length < 7 || phone.length > 20 || regExp.letters.test(phone)) {
-                errors.push('You must specify a correct phone in international format');
-                visualize.addErrorClass('phone');
-            } else {
-                visualize.removeErrorClass('phone');
-            }
+            return (phone.length < 7 ||
+                    phone.length > 20 ||
+                    regExp.letters.test(phone)) ? false : true;
         },
 
         skype: function(skype){
-            if (skype.length < 5) {
-                errors.push('A skype login is required');
-                visualize.addErrorClass('skype');
-            } else {
-                visualize.removeErrorClass('skype');
-            }
+            return (skype.length < 5) ? false : true;
         },
+
         firstName: function(firstName){
-            if (firstName.length < 3) {
-                //Validation.errors.push('A firstName is required');
-                //Validation.addErrorClass('firstName');
-                return false;
-            } else {
-                //Validation.removeErrorClass('firstName');
-                return true;
-            }
+            return (firstName.length < 3) ? false : true;
         },
 
         lastName: function(lastName){
-            if (lastName.length < 3) {
-                //Validation.errors.push('A lastName is required');
-                //Validation.addErrorClass('lastName');
-                return false;
-            } else {
-                //Validation.removeErrorClass('lastName');
-                return true;
-            }
+            return (lastName.length < 3) ? false : true;
         }
     },
 
     visualize = {
+
+        init: function(field){
+            (visualize[field] !== undefined) ? visualize[field]() : console.log('Visualize  method \''+ field +'\' doesn\'t exist');
+
+            visualize.showErrors();
+            //visualize.removeErrorClass();
+            visualize.addErrorClass(field);
+        },
+
+        email: function(){
+            errors.push('Email must be a valid');
+        },
+
+        phone: function(){
+            errors.push('You must specify a correct phone in international format');
+        },
+
+        skype: function(){
+            errors.push('A skype login is required');
+        },
+
+        firstName: function(){
+            errors.push('A firstName is required');
+        },
+
+        lastName: function(){
+            errors.push('A lastName is required');
+        },
+
         showErrors: function(){
             var errorString = '';
             for(var i=0; i < errors.length; i++){
@@ -100,16 +107,17 @@ var Validation = (function(){
         },
 
         addErrorClass: function(field){
-            settings.$form.find('input[name="'+ field +'"]').addClass('error');
+            settings.$form.find('input[data-validate="'+ field +'"]').addClass('error');
         },
 
-        removeErrorClass: function(field){
-            settings.$form.find('input[name="'+ field +'"]').removeClass('error');
+        clearErrorClass: function(){
+            settings.$form.find('input[data-validate]').removeClass('error');
         },
 
         clearErrors: function() {
             errors = [];
             settings.$form.find('.errors').html('');
+            visualize.clearErrorClass();
         }
     };
 
