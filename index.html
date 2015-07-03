@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>FormReader & Validator</title>
+    <title>FormValidator & FormReader</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./bower_components/animate-css/animate.min.css">
     <link rel="stylesheet" href="vendors/highlight/highlight.css">
@@ -45,7 +45,7 @@
             <div class="init">JS:
 <pre>
     <code class="js">
-        $('form').submit(function(){
+        $('formOne').submit(function(){
 
             if(!Validation.check('#formOne')) return;
                 //your code
@@ -81,8 +81,6 @@
             ...
             &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
                 &lt;fieldset&gt;
-                &lt;input ... data-validate="firstName" ... &gt;
-                &lt;input ... data-validate="lastName" ... &gt;
                 &lt;input ... data-validate="email" ... &gt;
                 &lt;input ... data-validate="phone" ... &gt;
                 &lt;input ... data-validate="skype" ... &gt;
@@ -95,12 +93,78 @@
             <div class="init">JS:
 <pre>
     <code class="js">
-        $('form').submit(function(){
+        $('formTwo').submit(function(){
 
-        if(!Validation.check('#formOne')) return;
-            //your code
-            //console.log(Validation.sendData);
-        }
+            if(!Validation.check('#formTwo')) return;
+                //your code
+                //console.log(Validation.sendData);
+            }
+        });
+    </code>
+</pre>
+            </div>
+            <div class="result">Output Data:
+                <code class="send-data">{}</code>
+            </div>
+        </fieldset>
+    </form>
+
+    <form id="formThree" method="post" action="" autocomplete="off" class="clear-fix">
+        <h2>Form with required "select" field</h2>
+        <fieldset class="errors"></fieldset>
+        <fieldset class="message"></fieldset>
+        <fieldset class="signup">
+            <input type='text' name="firstName" placeholder='First:'>
+            <input type='text' name="lastName" placeholder='Last:'>
+            <input type='text' name="email" data-validate="email" placeholder='Email:*'>
+            <input type='text' name="phone" data-validate="phone" placeholder='Phone:*'>
+            <input type='text' name="skype" data-validate="skype" placeholder='Skype:*'>
+            <label class="select">
+                <select name="country" data-validate="country">
+                    <option selected disabled>Choose country*</option>
+                    <option value="England">England</option>
+                    <option value="USA">USA</option>
+                    <option value="France">France</option>
+                    <option value="Germany">Germany</option>
+                </select>
+            </label>
+            <input type='submit' placeholder='SUBMIT' value="Submit">
+        </fieldset>
+        <fieldset class="code-review">
+            <div class="init">HTML:
+<pre>
+    <code class="html">
+        &lt;form&gt;
+        ...
+        &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
+        &lt;fieldset&gt;
+            &lt;input ... data-validate="email" ... &gt;
+            &lt;input ... data-validate="phone" ... &gt;
+            &lt;input ... data-validate="skype" ... &gt;
+        &lt;label class="select"&gt;
+            &lt;select name="country" data-validate="country"&gt;
+                &lt;option selected disabled&gt;Choose country&lt;/option&gt;
+                &lt;option value="England"&gt;England&lt;/option&gt;
+                &lt;option value="USA"&gt;USA&lt;/option&gt;
+                &lt;option value="France"&gt;France&lt;/option&gt;
+                &lt;option value="Germany"&gt;Germany&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/label&gt;
+        &lt;/fieldset&gt;
+        ...
+        &lt;/form&gt;
+    </code>
+</pre>
+            </div>
+            <div class="init">JS:
+<pre>
+    <code class="js">
+        $('formThree').submit(function(){
+
+            if(!Validation.check('#formThree')) return;
+                //your code
+                //console.log(Validation.sendData);
+            }
         });
     </code>
 </pre>
@@ -126,6 +190,12 @@
             $('#formTwo').submit(function(){
                 if(Validation.check('#formTwo')){
                     $('#formTwo').find('.send-data').text(JSON.stringify(Validation.sendData));
+                }
+            });
+
+            $('#formThree').submit(function(){
+                if(Validation.check('#formThree')){
+                    $('#formThree').find('.send-data').text(JSON.stringify(Validation.sendData));
                 }
             });
         });

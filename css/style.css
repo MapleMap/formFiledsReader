@@ -100,3 +100,52 @@ form .code-review .result {
 form .code-review .comment {
   color: rgba(0, 0, 0, 0.4);
 }
+form label.select {
+  position: relative;
+  display: inline-block;
+  width: 80%;
+  margin-top: 20px;
+}
+form label.select:after {
+  content: '<>';
+  position: absolute;
+  top: 2px;
+  right: 0;
+  font: 16px monospace;
+  color: rgba(128, 128, 128, 0.52);
+  padding: 0 0 2px;
+  pointer-events: none;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+form label.select:before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: block;
+  width: 20px;
+  height: 26px;
+  background: #f8f8f8;
+  pointer-events: none;
+}
+form label.select select {
+  width: 100%;
+  padding: 3px 0;
+  font-size: 1em;
+  margin: 0;
+  background: white;
+  color: rgba(0, 0, 0, 0.24);
+  border: none;
+  outline: none;
+  display: inline-block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
