@@ -14,46 +14,44 @@ var Validation = (function(){
     check = function(formID, callback){
         settings.$form = $(formID);
 
-        Visualize.clearErrors();
-        getFormData();
-        start();
+        Data.getAllFields();
+        Data.getRequiredFields();
 
-        if(!errors.length){
-            Visualize.clearErrors();
-            if (callback && typeof(callback) === "function") callback();
-            return true;
-        } else {
-            Visualize.showErrors();
-            return false;
-        }
+        if(!errors.length) (callback && typeof(callback) === "function") ? callback() : '';
     },
 
-    getFormData = function(){
-        var formDataArray = settings.$form.serializeArray();
+    Data = {
+        getAllFields: function(){
+            var formDataArray = settings.$form.serializeArray();
 
-        for(var i=0; i < formDataArray.length; i++){
-            sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
-        }
-    },
-
-    start = function(){
-        var validateArray = settings.$form.find("[data-validate]"),
-            requireData = {};
-
-        for(var i=0; i < validateArray.length; i++){
-            requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
-        }
-        for(var key in requireData){
-            if (Validate[key] !== undefined) {
-                var result = Validate[key]( requireData[key] );
-                if(!result) Visualize.init(key);
-            } else {
-                console.log('Validate  method \''+ key +'\' doesn\'t exist')
+            for(var i=0; i < formDataArray.length; i++){
+                sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
             }
+        },
+
+        getRequiredFields: function(){
+            var validateArray = settings.$form.find("[data-validate]"),
+                requireData = {};
+
+            for(var i=0; i < validateArray.length; i++){
+                requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
+            }
+
+            Validate.start(requireData);
         }
     },
 
     Validate = {
+        start: function(requireData) {
+            for(var key in requireData){
+                if (Validate[key] !== undefined) {
+                    var result = Validate[key]( requireData[key] );
+                    if(!result) Errors.init(key);
+                } else {
+                    console.log('Validate  method \''+ key +'\' doesn\'t exist')
+                }
+            }
+        },
 
         email: function(email){
             return (!regExp.mail.test(email)) ? false : true;
@@ -82,13 +80,10 @@ var Validation = (function(){
         }
     },
 
-    Visualize = {
+    Errors = {
 
         init: function(field){
-            (Visualize[field] !== undefined) ? Visualize[field]() : console.log('Visualize  method \''+ field +'\' doesn\'t exist');
-
-            Visualize.showErrors();
-            Visualize.addErrorClass(field);
+            (Errors[field] !== undefined) ? Errors[field]() : console.log('Errors  method \''+ field +'\' doesn\'t exist');
         },
 
         email: function(){
@@ -113,29 +108,29 @@ var Validation = (function(){
 
         country: function(){
             errors.push('Country must be selected');
-        },
-
-        showErrors: function(){
-            var errorString = '';
-            for(var i=0; i < errors.length; i++){
-                errorString += '<div class="animated pulse">' + errors[i] + '</div>';
-            }
-            settings.$form.find('.errors').html(errorString);
-        },
-
-        addErrorClass: function(field){
-            settings.$form.find('input[data-validate="'+ field +'"]').addClass('error');
-        },
-
-        clearErrorClass: function(){
-            settings.$form.find('input[data-validate]').removeClass('error');
-        },
-
-        clearErrors: function() {
-            errors = [];
-            settings.$form.find('.errors').html('');
-            Visualize.clearErrorClass();
         }
+
+        //showErrors: function(){
+        //    var errorString = '';
+        //    for(var i=0; i < errors.length; i++){
+        //        errorString += '<div class="animated pulse">' + errors[i] + '</div>';
+        //    }
+        //    settings.$form.find('.errors').html(errorString);
+        //},
+        //
+        //addErrorClass: function(field){
+        //    settings.$form.find('input[data-validate="'+ field +'"]').addClass('error');
+        //},
+        //
+        //clearErrorClass: function(){
+        //    settings.$form.find('input[data-validate]').removeClass('error');
+        //},
+        //
+        //clearErrors: function() {
+        //    errors = [];
+        //    settings.$form.find('.errors').html('');
+        //    Visualize.clearErrorClass();
+        //}
     };
 
     return {
