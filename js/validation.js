@@ -13,7 +13,6 @@ var Validation = (function(){
 
     check = function(formID, callback){
         settings.$form = $(formID);
-        errors = {};
 
         Data.getAllFields();
         Data.getRequiredFields();
@@ -53,7 +52,9 @@ var Validation = (function(){
             for(var key in requireData){
                 if (Validate[key] !== undefined) {
                     var result = Validate[key]( requireData[key] );
-                    if(!result) Errors.init(key);
+
+                    (!result) ? Errors.init(key) : Errors.delete(key);
+
                 } else {
                     console.log('Validate  method \''+ key +'\' doesn\'t exist')
                 }
@@ -89,8 +90,12 @@ var Validation = (function(){
 
     Errors = {
 
-        init: function(field){
-            (Errors[field] !== undefined) ? Errors[field]() : console.log('Errors  method \''+ field +'\' doesn\'t exist');
+        init: function(key) {
+            (Errors[key] !== undefined) ? Errors[key]() : console.log('Errors  method \''+ field +'\' doesn\'t exist');
+        },
+
+        delete: function(key) {
+            (errors[key] !== undefined) ? delete errors[key] : '';
         },
 
         email: function(){
