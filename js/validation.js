@@ -4,7 +4,7 @@ var Validation = (function(){
     var settings = {
             $form: false
         },
-        errors = [],
+        errors = {},
         sendData = {},
         regExp = {
             letters: /^[a-zA-Z]+$/,
@@ -13,18 +13,24 @@ var Validation = (function(){
 
     check = function(formID, callback){
         settings.$form = $(formID);
+        errors = {};
 
         Data.getAllFields();
         Data.getRequiredFields();
 
-        if(!errors.length) (callback && typeof(callback) === "function") ? callback() : '';
+        (callback && typeof(callback) === "function") ? callback() : '';
+
+        return ($.isEmptyObject(errors) ? true : false);
     },
 
     Data = {
+
         getAllFields: function(){
             var formDataArray = settings.$form.serializeArray();
 
-            for(var i=0; i < formDataArray.length; i++){
+            for (var i=0; i < formDataArray.length; i++){
+                if(formDataArray[i]['value'] == '') continue;
+
                 sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
             }
         },
@@ -37,12 +43,13 @@ var Validation = (function(){
                 requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
             }
 
-            Validate.start(requireData);
+            Validate.init(requireData);
         }
     },
 
     Validate = {
-        start: function(requireData) {
+
+        init: function(requireData) {
             for(var key in requireData){
                 if (Validate[key] !== undefined) {
                     var result = Validate[key]( requireData[key] );
@@ -87,54 +94,33 @@ var Validation = (function(){
         },
 
         email: function(){
-            errors.push('Email must be a valid');
+            errors.email = 'Email must be a valid';
         },
 
         phone: function(){
-            errors.push('You must specify a correct phone in international format');
+            errors.phone = 'You must specify a correct phone in international format';
         },
 
         skype: function(){
-            errors.push('A skype login is required');
+            errors.skype = 'A skype login is required';
         },
 
         firstName: function(){
-            errors.push('A firstName is required');
+            errors.firstName = 'A firstName is required';
         },
 
         lastName: function(){
-            errors.push('A lastName is required');
+            errors.lastName = 'A lastName is required';
         },
 
         country: function(){
-            errors.push('Country must be selected');
+            errors.country = 'Country must be selected';
         }
-
-        //showErrors: function(){
-        //    var errorString = '';
-        //    for(var i=0; i < errors.length; i++){
-        //        errorString += '<div class="animated pulse">' + errors[i] + '</div>';
-        //    }
-        //    settings.$form.find('.errors').html(errorString);
-        //},
-        //
-        //addErrorClass: function(field){
-        //    settings.$form.find('input[data-validate="'+ field +'"]').addClass('error');
-        //},
-        //
-        //clearErrorClass: function(){
-        //    settings.$form.find('input[data-validate]').removeClass('error');
-        //},
-        //
-        //clearErrors: function() {
-        //    errors = [];
-        //    settings.$form.find('.errors').html('');
-        //    Visualize.clearErrorClass();
-        //}
     };
 
     return {
         check: check,
+        errors: errors,
         sendData: sendData
     }
 }());

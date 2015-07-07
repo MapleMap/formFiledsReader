@@ -182,9 +182,18 @@
 
 
             $('#formOne').submit(function(){
-                if(Validation.check('#formOne')) {
-                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
+                var result = Validation.check('#formOne', function(e){
+                    console.log('callback');
+                });
+                if (result) {
+                    console.log(Validation.sendData);
+                } else {
+                    console.log(Validation.klm);
                 }
+
+//                if(Validation.check('#formOne')) {
+//                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
+//                }
             });
 
             $('#formTwo').submit(function(){
