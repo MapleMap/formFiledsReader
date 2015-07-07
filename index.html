@@ -47,10 +47,15 @@
     <code class="js">
         $('formOne').submit(function(){
 
-            if(!Validation.check('#formOne')) return;
-                //your code
-                //console.log(Validation.sendData);
+            var result =  Validation.check('#formOne', function(){
+                //your callback
+            });
+            if(result) {
+                console.log(Validation.senData)
+            } else {
+                console.log(Validation.senData)
             }
+
         });
     </code>
 </pre>
@@ -95,9 +100,13 @@
     <code class="js">
         $('formTwo').submit(function(){
 
-            if(!Validation.check('#formTwo')) return;
-                //your code
-                //console.log(Validation.sendData);
+            var result =  Validation.check('#formTwo', function(){
+                //your callback
+            });
+            if(result) {
+                console.log(Validation.senData)
+            } else {
+                console.log(Validation.senData)
             }
         });
     </code>
@@ -161,10 +170,15 @@
     <code class="js">
         $('formThree').submit(function(){
 
-            if(!Validation.check('#formThree')) return;
-                //your code
-                //console.log(Validation.sendData);
+            var result =  Validation.check('#formThree', function(){
+                //your callback
+            });
+            if(result) {
+                console.log(Validation.senData)
+            } else {
+                console.log(Validation.senData)
             }
+
         });
     </code>
 </pre>
@@ -178,24 +192,16 @@
         $(document).ready(function(){
             $('form').submit(function(e){
                 e.preventDefault();
-            });
 
-
-            $('#formOne').submit(function(){
-                if(Validation.check('#formOne')) {
-                    $('#formOne').find('.send-data').text(JSON.stringify(Validation.sendData));
-                }
-            });
-
-            $('#formTwo').submit(function(){
-                if(Validation.check('#formTwo')){
-                    $('#formTwo').find('.send-data').text(JSON.stringify(Validation.sendData));
-                }
-            });
-
-            $('#formThree').submit(function(){
-                if(Validation.check('#formThree')){
-                    $('#formThree').find('.send-data').text(JSON.stringify(Validation.sendData));
+                var formID = '#' + $(this).attr('id'),
+                    $sendData = $(this).find('.send-data'),
+                    result = Validation.check(formID, function(e){
+                        //your callback
+                    });
+                if (result) {
+                    $sendData.html('Form Data:<br>' + JSON.stringify(Validation.sendData));
+                } else {
+                    $sendData.html('Error Data:<br>' + JSON.stringify(Validation.errors));
                 }
             });
         });
