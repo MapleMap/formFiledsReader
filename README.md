@@ -2,6 +2,7 @@
 
 - Add to page
 ```html
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="./js/validation.js"></script>
 ```
 - Add "data-" attributes for the form's fields that you want to test
