@@ -27,6 +27,7 @@ $('#yourForm').submit(function(){
 ```
 - You can add own validation conditions and error's messages in validation.js
 ```javascript
+...
 phone: function(phone) {
     return (phone.length < 7 ||
             phone.length > 20 ||
@@ -36,5 +37,6 @@ phone: function(phone) {
 skype: function(skype) {
     return (skype.length < 5) ? false : true;
 }
+...
 ```
-- See [example] (http://maplemap.github.io/module.form-validator)
+- See and try [example] (http://maplemap.github.io/module.form-validator)
