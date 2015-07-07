@@ -17,13 +17,12 @@
 $('#yourForm').submit(function(){
     var result = Validation.check('#formOne', function(){
         //your callback
-        
-        if (result) {
-            console.log(Validation.sendData);
-        } else {
-            console.log(Validation.errors);
-        }
     });   
+    if (result) {
+        console.log(Validation.sendData);
+    } else {
+        console.log(Validation.errors);
+    }
 });
 ```
 - You can add own validation conditions and error's messages in validation.js
