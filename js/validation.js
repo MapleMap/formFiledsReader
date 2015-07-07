@@ -4,7 +4,7 @@ var Validation = (function(){
     var settings = {
             $form: false
         },
-        errors = [],
+        errors = {},
         sendData = {},
         regExp = {
             letters: /^[a-zA-Z]+$/,
@@ -14,132 +14,118 @@ var Validation = (function(){
     check = function(formID, callback){
         settings.$form = $(formID);
 
-        Visualize.clearErrors();
-        getFormData();
-        start();
+        Data.getAllFields();
+        Data.getRequiredFields();
 
-        if(!errors.length){
-            Visualize.clearErrors();
-            if (callback && typeof(callback) === "function") callback();
-            return true;
-        } else {
-            Visualize.showErrors();
-            return false;
-        }
+        (callback && typeof(callback) === "function") ? callback() : '';
+
+        return ($.isEmptyObject(errors) ? true : false);
     },
 
-    getFormData = function(){
-        var formDataArray = settings.$form.serializeArray();
+    Data = {
 
-        for(var i=0; i < formDataArray.length; i++){
-            sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
-        }
-    },
+        getAllFields: function(){
+            var formDataArray = settings.$form.serializeArray();
 
-    start = function(){
-        var validateArray = settings.$form.find("[data-validate]"),
-            requireData = {};
+            for (var i=0; i < formDataArray.length; i++) {
+                if(formDataArray[i]['value'] == '') continue;
 
-        for(var i=0; i < validateArray.length; i++){
-            requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
-        }
-        for(var key in requireData){
-            if (Validate[key] !== undefined) {
-                var result = Validate[key]( requireData[key] );
-                if(!result) Visualize.init(key);
-            } else {
-                console.log('Validate  method \''+ key +'\' doesn\'t exist')
+                sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
             }
+        },
+
+        getRequiredFields: function() {
+            var validateArray = settings.$form.find("[data-validate]"),
+                requireData = {};
+
+            for(var i=0; i < validateArray.length; i++) {
+                requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
+            }
+
+            Validate.init(requireData);
         }
     },
 
     Validate = {
 
-        email: function(email){
+        init: function(requireData) {
+            for(var key in requireData) {
+                if (Validate[key] !== undefined) {
+                    var result = Validate[key]( requireData[key] );
+
+                    (!result) ? Errors.init(key) : Errors.delete(key);
+
+                } else {
+                    console.log('Validate  method \''+ key +'\' doesn\'t exist')
+                }
+            }
+        },
+
+        email: function(email) {
             return (!regExp.mail.test(email)) ? false : true;
         },
 
-        phone: function(phone){
+        phone: function(phone) {
             return (phone.length < 7 ||
                     phone.length > 20 ||
                     regExp.letters.test(phone)) ? false : true;
         },
 
-        skype: function(skype){
+        skype: function(skype) {
             return (skype.length < 5) ? false : true;
         },
 
-        firstName: function(firstName){
+        firstName: function(firstName) {
             return (firstName.length < 3) ? false : true;
         },
 
-        lastName: function(lastName){
+        lastName: function(lastName) {
             return (lastName.length < 3) ? false : true;
         },
 
-        country: function(country){
+        country: function(country) {
             return (country == 'Choose country*') ? false : true;
         }
     },
 
-    Visualize = {
+    Errors = {
 
-        init: function(field){
-            (Visualize[field] !== undefined) ? Visualize[field]() : console.log('Visualize  method \''+ field +'\' doesn\'t exist');
-
-            Visualize.showErrors();
-            Visualize.addErrorClass(field);
+        init: function(key) {
+            (Errors[key] !== undefined) ? Errors[key]() : console.log('Errors  method \''+ field +'\' doesn\'t exist');
         },
 
-        email: function(){
-            errors.push('Email must be a valid');
+        delete: function(key) {
+            (errors[key] !== undefined) ? delete errors[key] : '';
         },
 
-        phone: function(){
-            errors.push('You must specify a correct phone in international format');
+        email: function() {
+            errors.email = 'Email must be a valid';
         },
 
-        skype: function(){
-            errors.push('A skype login is required');
+        phone: function() {
+            errors.phone = 'You must specify a correct phone in international format';
         },
 
-        firstName: function(){
-            errors.push('A firstName is required');
+        skype: function() {
+            errors.skype = 'A skype login is required';
         },
 
-        lastName: function(){
-            errors.push('A lastName is required');
+        firstName: function() {
+            errors.firstName = 'A firstName is required';
         },
 
-        country: function(){
-            errors.push('Country must be selected');
+        lastName: function() {
+            errors.lastName = 'A lastName is required';
         },
 
-        showErrors: function(){
-            var errorString = '';
-            for(var i=0; i < errors.length; i++){
-                errorString += '<div class="animated pulse">' + errors[i] + '</div>';
-            }
-            settings.$form.find('.errors').html(errorString);
-        },
-
-        addErrorClass: function(field){
-            settings.$form.find('input[data-validate="'+ field +'"]').addClass('error');
-        },
-
-        clearErrorClass: function(){
-            settings.$form.find('input[data-validate]').removeClass('error');
-        },
-
-        clearErrors: function() {
-            errors = [];
-            settings.$form.find('.errors').html('');
-            Visualize.clearErrorClass();
+        country: function() {
+            errors.country = 'Country must be selected';
         }
     };
 
     return {
         check: check,
+        errors: errors,
         sendData: sendData
     }
 }());
