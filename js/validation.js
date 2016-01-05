@@ -4,128 +4,113 @@ var Validation = (function(){
     var settings = {
             $form: false
         },
-        errors = {},
-        sendData = {},
         regExp = {
             letters: /^[a-zA-Z]+$/,
             mail: /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,}$/
         },
 
-    check = function(formID, callback){
-        settings.$form = $(formID);
+    check = function(options, callback){
+        if(!options.fields || !options.fields.length) {
+            console.log('fields key is empty or incorrect format!');
+            return callback({result: 'failed', description: 'Sorry, but try later or contact support'});
+        }
 
-        Data.getAllFields();
-        Data.getRequiredFields();
+        settings.$form = options.$form;
+        var validateFields = options.fields;
 
-        (callback && typeof(callback) === "function") ? callback() : '';
+        Data.getDataFromFormFields(function (formData) {
 
-        return ($.isEmptyObject(errors) ? true : false);
+            for (var i=0; i < validateFields.length; i++) {
+                if ( Validate[validateFields[i]] ) {
+                    var res = Validate[validateFields[i]]( formData[validateFields[i]] );
+
+                    if(res.result == 'failed') return callback(res);
+                } else {
+                    console.log('Method "' + [validateFields[i]] + '" of validation doesn\'t exist!');
+                    return callback({result: 'failed', description: 'Sorry, but try later or contact support'});
+                }
+            }
+
+            callback(null, formData);
+
+        });
     },
 
     Data = {
 
-        getAllFields: function(){
+        getDataFromFormFields: function(callback){
             var formDataArray = settings.$form.serializeArray();
+            var formData = {};
 
             for (var i=0; i < formDataArray.length; i++) {
                 if(formDataArray[i]['value'] == '') continue;
 
-                sendData[formDataArray[i]['name']] = formDataArray[i]['value'];
-            }
-        },
-
-        getRequiredFields: function() {
-            var validateArray = settings.$form.find("[data-validate]"),
-                requireData = {};
-
-            for(var i=0; i < validateArray.length; i++) {
-                requireData[validateArray[i].getAttribute('data-validate')] = validateArray[i]['value'];
+                formData[formDataArray[i]['name']] = formDataArray[i]['value'];
             }
 
-            Validate.init(requireData);
+            callback(formData);
         }
     },
 
     Validate = {
 
-        init: function(requireData) {
-            for(var key in requireData) {
-                if (Validate[key] !== undefined) {
-                    var result = Validate[key]( requireData[key] );
+        email: function (email) {
+            if( !email ) return {result: 'failed', description: 'Email can not be empty'};
+            if( !regExp.mail.test(email) ) return {result: 'failed', description: 'Email must be valid'};
 
-                    (!result) ? Errors.init(key) : Errors.delete(key);
-
-                } else {
-                    console.log('Validate  method \''+ key +'\' doesn\'t exist')
-                }
-            }
+            return {result: 'success'}
         },
 
-        email: function(email) {
-            return (!regExp.mail.test(email)) ? false : true;
+        password: function (password) {
+            if( !password ) return {result: 'failed', description: 'Password can not be empty'};
+            if( password.length < 3) return {result: 'failed', description: 'Password should be equal to or greater than 3 characters'};
+
+            return {result: 'success'}
         },
 
-        phone: function(phone) {
-            return (phone.length < 7 ||
-                    phone.length > 20 ||
-                    regExp.letters.test(phone)) ? false : true;
+        password_confirm: function (password_confirm) {
+            if( !password_confirm ) return {result: 'failed', description: 'Password Confirm can not be empty'};
+            if( data.password != password_confirm) return {result: 'failed', description: 'Password Confirm and Password are not equal'};
+
+            return {result: 'success'}
         },
 
-        skype: function(skype) {
-            return (skype.length < 5) ? false : true;
+        firstName: function (first_name) {
+            if( !first_name ) return {result: 'failed', description: 'First Name can not be empty'};
+            if( first_name.length < 3) return {result: 'failed', description: 'First Name should be equal to or greater than 3 characters'};
+
+            return {result: 'success'}
         },
 
-        firstName: function(firstName) {
-            return (firstName.length < 3) ? false : true;
+        lastName: function (last_name) {
+            if( !last_name ) return {result: 'failed', description: 'Last Name can not be empty'};
+            if( last_name.length < 3) return {result: 'failed', description: 'Last Name should be equal to or greater than 3 characters'};
+
+            return {result: 'success'}
         },
 
-        lastName: function(lastName) {
-            return (lastName.length < 3) ? false : true;
+        phone: function (phone) {
+            if( !phone ) return {result: 'failed', description: 'Phone can not be empty'};
+            if( phone.length < 10 ) return {result: 'failed', description: 'Phone should be equal to or greater than 10 characters'};
+
+            return {result: 'success'}
         },
 
-        country: function(country) {
-            return (country == 'Choose country*') ? false : true;
-        }
-    },
+        skype: function (skype) {
+            if( !skype ) return {result: 'failed', description: 'Skype name can not be empty'};
+            if( skype.length < 3) return {result: 'failed', description: 'Skype name should be equal to or greater than 3 characters'};
 
-    Errors = {
-
-        init: function(key) {
-            (Errors[key] !== undefined) ? Errors[key]() : console.log('Errors  method \''+ field +'\' doesn\'t exist');
+            return {result: 'success'}
         },
 
-        delete: function(key) {
-            (errors[key] !== undefined) ? delete errors[key] : '';
-        },
+        country: function (country) {
+            if( !country ) return {result: 'failed', description: 'Country can not be empty'};
 
-        email: function() {
-            errors.email = 'Email must be a valid';
-        },
-
-        phone: function() {
-            errors.phone = 'You must specify a correct phone in international format';
-        },
-
-        skype: function() {
-            errors.skype = 'A skype login is required';
-        },
-
-        firstName: function() {
-            errors.firstName = 'A firstName is required';
-        },
-
-        lastName: function() {
-            errors.lastName = 'A lastName is required';
-        },
-
-        country: function() {
-            errors.country = 'Country must be selected';
+            return {result: 'success'}
         }
     };
 
     return {
-        check: check,
-        errors: errors,
-        sendData: sendData
+        check: check
     }
 }());
