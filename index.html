@@ -14,52 +14,44 @@
         <fieldset class="errors"></fieldset>
         <fieldset class="message">*all fileds are required</fieldset>
         <fieldset class="signup">
-            <input type='text' name="firstName" data-validate="firstName" placeholder='First:'>
-            <input type='text' name="lastName" data-validate="lastName" placeholder='Last:'>
-            <input type='text' name="email" data-validate="email" placeholder='Email:'>
-            <input type='text' name="phone" data-validate="phone" placeholder='Phone:'>
-            <input type='text' name="skype" data-validate="skype" placeholder='Skype:'>
+            <input type='text' name="firstName" placeholder='First:'>
+            <input type='text' name="lastName" placeholder='Last:'>
+            <input type='text' name="email" placeholder='Email:'>
+            <input type='text' name="phone" placeholder='Phone:'>
+            <input type='text' name="skype" placeholder='Skype:'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div class="init">HTML:
-<pre>
-    <code class="html">
-        &lt;form&gt;
-            ...
-            &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
-            &lt;fieldset&gt;
-                &lt;input ... data-validate="firstName" ... &gt;
-                &lt;input ... data-validate="lastName" ... &gt;
-                &lt;input ... data-validate="email" ... &gt;
-                &lt;input ... data-validate="phone" ... &gt;
-                &lt;input ... data-validate="skype" ... &gt;
-            &lt;/fieldset&gt;
-            ...
-        &lt;/form&gt;
-    </code>
-</pre>
+            Output Data:
+            <div class="result">
+                <code class="send-data">- click submit button -</code>
             </div>
             <div class="init">JS:
 <pre>
     <code class="js">
-        $('formOne').submit(function(){
+        $('#formOne').submit(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-            var result =  Validation.check('#formOne', function(){
-                //your callback
-            });
-            if(result) {
-                console.log(Validation.senData)
-            } else {
-                console.log(Validation.senData)
-            }
+            var $form = $(this),
+            formID = $form.attr('id'),
+            $errors = $form.find('.errors'),
+            $sendData = $form.find('.send-data');
 
+            $errors.html('');
+
+            Validation.check({
+                    $form: $form,
+                    fields: ['firstName', 'lastName', 'email', 'phone', 'skype']
+                }, function (err, formData) {
+                    $sendData.html( JSON.stringify(err));
+                    if(err) return $errors.html( err.description );
+
+                    $sendData.html( JSON.stringify(formData));
+            })
         });
     </code>
 </pre>
-            </div>
-            <div class="result">Output Data:
-                <code class="send-data">{}</code>
             </div>
         </fieldset>
     </form>
@@ -71,47 +63,42 @@
         <fieldset class="signup">
             <input type='text' name="firstName" placeholder='First:'>
             <input type='text' name="lastName" placeholder='Last:'>
-            <input type='text' name="email" data-validate="email" placeholder='Email:*'>
-            <input type='text' name="phone" data-validate="phone" placeholder='Phone:*'>
-            <input type='text' name="skype" data-validate="skype" placeholder='Skype:*'>
+            <input type='text' name="email" placeholder='Email:*'>
+            <input type='text' name="phone" placeholder='Phone:*'>
+            <input type='text' name="skype" placeholder='Skype:*'>
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div class="init">HTML:
-<pre>
-    <code class="html">
-        &lt;form&gt;
-            ...
-            &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
-                &lt;fieldset&gt;
-                &lt;input ... data-validate="email" ... &gt;
-                &lt;input ... data-validate="phone" ... &gt;
-                &lt;input ... data-validate="skype" ... &gt;
-            &lt;/fieldset&gt;
-            ...
-        &lt;/form&gt;
-    </code>
-</pre>
+            Output Data:
+            <div class="result">
+                <code class="send-data">- click submit button -</code>
             </div>
             <div class="init">JS:
 <pre>
     <code class="js">
-        $('formTwo').submit(function(){
+        $('#formTwo').submit(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-            var result =  Validation.check('#formTwo', function(){
-                //your callback
-            });
-            if(result) {
-                console.log(Validation.senData)
-            } else {
-                console.log(Validation.senData)
-            }
+            var $form = $(this),
+            formID = $form.attr('id'),
+            $errors = $form.find('.errors'),
+            $sendData = $form.find('.send-data');
+
+            $errors.html('');
+
+            Validation.check({
+                    $form: $form,
+                    fields: ['email', 'phone', 'skype']
+                }, function (err, formData) {
+                    $sendData.html( JSON.stringify(err));
+                    if(err) return $errors.html( err.description );
+
+                    $sendData.html( JSON.stringify(formData));
+            })
         });
     </code>
 </pre>
-            </div>
-            <div class="result">Output Data:
-                <code class="send-data">{}</code>
             </div>
         </fieldset>
     </form>
@@ -123,9 +110,9 @@
         <fieldset class="signup">
             <input type='text' name="firstName" placeholder='First:'>
             <input type='text' name="lastName" placeholder='Last:'>
-            <input type='text' name="email" data-validate="email" placeholder='Email:*'>
-            <input type='text' name="phone" data-validate="phone" placeholder='Phone:*'>
-            <input type='text' name="skype" data-validate="skype" placeholder='Skype:*'>
+            <input type='text' name="email" placeholder='Email:*'>
+            <input type='text' name="phone" placeholder='Phone:*'>
+            <input type='text' name="skype" placeholder='Skype:*'>
             <label class="select">
                 <select name="country" data-validate="country">
                     <option selected disabled>Choose country*</option>
@@ -138,69 +125,69 @@
             <input type='submit' placeholder='SUBMIT' value="Submit">
         </fieldset>
         <fieldset class="code-review">
-            <div class="init">HTML:
-<pre>
-    <code class="html">
-        &lt;form&gt;
-        ...
-        &lt;fieldset class="errors"&gt;&lt;/fieldset&gt;
-        &lt;fieldset&gt;
-            &lt;input ... data-validate="email" ... &gt;
-            &lt;input ... data-validate="phone" ... &gt;
-            &lt;input ... data-validate="skype" ... &gt;
-        &lt;label class="select"&gt;
-            &lt;select name="country" data-validate="country"&gt;
-                &lt;option selected disabled&gt;Choose country&lt;/option&gt;
-                &lt;option value="England"&gt;England&lt;/option&gt;
-                &lt;option value="USA"&gt;USA&lt;/option&gt;
-                &lt;option value="France"&gt;France&lt;/option&gt;
-                &lt;option value="Germany"&gt;Germany&lt;/option&gt;
-            &lt;/select&gt;
-        &lt;/label&gt;
-        &lt;/fieldset&gt;
-        ...
-        &lt;/form&gt;
-    </code>
-</pre>
+            Output Data:
+            <div class="result">
+                <code class="send-data">- click submit button -</code>
             </div>
             <div class="init">JS:
 <pre>
     <code class="js">
-        $('formThree').submit(function(){
+        $('#formThree').submit(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-            var result =  Validation.check('#formThree', function(){
-                //your callback
-            });
-            if(result) {
-                console.log(Validation.senData)
-            } else {
-                console.log(Validation.senData)
-            }
+            var $form = $(this),
+            formID = $form.attr('id'),
+            $errors = $form.find('.errors'),
+            $sendData = $form.find('.send-data');
 
+            $errors.html('');
+
+            Validation.check({
+                    $form: $form,
+                    fields: ['email', 'phone', 'skype', 'country']
+                }, function (err, formData) {
+                    $sendData.html( JSON.stringify(err));
+                    if(err) return $errors.html( err.description );
+
+                    $sendData.html( JSON.stringify(formData));
+            })
         });
     </code>
 </pre>
-            </div>
-            <div class="result">Output Data:
-                <code class="send-data">{}</code>
             </div>
         </fieldset>
     </form>
     <script>
         $(document).ready(function(){
-            $('form').submit(function(e){
-                e.preventDefault();
+            var validateFields = {
+                formOne: ['firstName', 'lastName', 'email', 'phone', 'skype'],
+                formTwo: ['email', 'phone', 'skype'],
+                formThree: ['email', 'phone', 'skype', 'country']
+            };
 
-                var formID = '#' + $(this).attr('id'),
-                    $sendData = $(this).find('.send-data'),
-                    result = Validation.check(formID, function(e){
-                        //your callback
-                    });
-                if (result) {
-                    $sendData.html('Form Data:<br>' + JSON.stringify(Validation.sendData));
-                } else {
-                    $sendData.html('Error Data:<br>' + JSON.stringify(Validation.errors));
-                }
+
+            $('form').submit(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var $form = $(this),
+                    formID = $form.attr('id'),
+                    $errors = $form.find('.errors'),
+                    $sendData = $form.find('.send-data');
+
+                $errors.html('');
+
+                Validation.check({
+                    $form: $form,
+                    fields: validateFields[formID]
+                }, function (err, formData) {
+                    $sendData.html( JSON.stringify(err));
+                    if(err) return $errors.html(err.description);
+
+
+                    $sendData.html( JSON.stringify(formData));
+                })
             });
         });
     </script>
