@@ -28,19 +28,19 @@ $('#yourForm').submit(function(){
 - You can add own validation conditions and error's messages in validation.js
 ```javascript
 ...
-    password: function (password) {
-        if( !password ) return {result: 'failed', description: 'Password can not be empty'};
-        if( password.length < 3) return {result: 'failed', description: 'Password should be equal to or greater than 3 characters'};
+password: function (password) {
+    if( !password ) return {result: 'failed', description: 'Password can not be empty'};
+    if( password.length < 3) return {result: 'failed', description: 'Password should be equal to or greater than 3 characters'};
 
-        return {result: 'success'}
-    },
+    return {result: 'success'}
+},
 
-    password_confirm: function (password_confirm) {
-        if( !password_confirm ) return {result: 'failed', description: 'Password Confirm can not be empty'};
-        if( validateFields.password != password_confirm) return {result: 'failed', description: 'Password Confirm and Password are not equal'};
+password_confirm: function (password_confirm) {
+    if( !password_confirm ) return {result: 'failed', description: 'Password Confirm can not be empty'};
+    if( validateFields.password != password_confirm) return {result: 'failed', description: 'Password Confirm and Password are not equal'};
 
-        return {result: 'success'}
-    }
+    return {result: 'success'}
+}
 ...
 ```
 - See and try [example] (http://maplemap.github.io/module.form-validator)
