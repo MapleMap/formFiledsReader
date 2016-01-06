@@ -17,6 +17,7 @@ $('#yourForm').submit(function(){
         if(err) {
             console.log(err);
             //your code
+            return;
         };
 
         console.log(formData);
