@@ -4,19 +4,21 @@ var Validation = (function(){
     var settings = {
             $form: false
         },
+        validateFields = {},
         regExp = {
             letters: /^[a-zA-Z]+$/,
             mail: /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,}$/
         },
 
     check = function(options, callback){
-        if(!options.fields || !options.fields.length) {
+        validateFields = options.fields;
+
+        if(!validateFields || !validateFields.length) {
             console.log('fields key is empty or incorrect format!');
             return callback({result: 'failed', description: 'Sorry, but try later or contact support'});
         }
 
         settings.$form = options.$form;
-        var validateFields = options.fields;
 
         Data.getDataFromFormFields(function (formData) {
 
@@ -70,7 +72,7 @@ var Validation = (function(){
 
         password_confirm: function (password_confirm) {
             if( !password_confirm ) return {result: 'failed', description: 'Password Confirm can not be empty'};
-            if( data.password != password_confirm) return {result: 'failed', description: 'Password Confirm and Password are not equal'};
+            if( validateFields.password != password_confirm) return {result: 'failed', description: 'Password Confirm and Password are not equal'};
 
             return {result: 'success'}
         },
