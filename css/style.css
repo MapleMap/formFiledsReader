@@ -96,6 +96,7 @@ form .code-review .init pre {
 form .code-review .result {
   width: 430px;
   word-wrap: break-word;
+  margin: 0 auto;
 }
 form .code-review .comment {
   color: rgba(0, 0, 0, 0.4);

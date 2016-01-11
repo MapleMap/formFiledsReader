@@ -5,38 +5,41 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="./js/validation.js"></script>
 ```
-- Add "data-" attributes for the form's fields that you want to test
-```html
-...
-<input type='text' name="email" data-validate="email" placeholder='Email:*'>
-<input type='text' name="phone" data-validate="phone" placeholder='Phone:*'>
-<input type='text' name="skype" data-validate="skype" placeholder='Skype:*'>
-...
-```
+
 - Check your form
 ```javascript
 $('#yourForm').submit(function(){
-    var result = Validation.check('#formOne', function(){
-        //your callback
-    });   
-    if (result) {
-        console.log(Validation.sendData);
-    } else {
-        console.log(Validation.errors);
-    }
+    
+    Validation.check({
+        $form: $(this),
+        fields: ['firstName', 'lastName', 'email'] //name of inputs for validating
+    }, function (err, formData) {
+        if(err) {
+            console.log(err);
+            //your code
+            return;
+        };
+
+        console.log(formData);
+        //your code
+    })
 });
 ```
 - You can add own validation conditions and error's messages in validation.js
 ```javascript
 ...
-phone: function(phone) {
-    return (phone.length < 7 ||
-            phone.length > 20 ||
-            regExp.letters.test(phone)) ? false : true;
+password: function (password) {
+    if( !password ) return {result: 'failed', description: 'Password can not be empty'};
+    if( password.length < 3) return {result: 'failed', description: 'Password should be equal to or greater than 3 characters'};
+
+    return {result: 'success'}
 },
 
-skype: function(skype) {
-    return (skype.length < 5) ? false : true;
+password_confirm: function (password_confirm) {
+    if( !password_confirm ) return {result: 'failed', description: 'Password Confirm can not be empty'};
+    if( validateFields.password != password_confirm) return {result: 'failed', description: 'Password Confirm and Password are not equal'};
+
+    return {result: 'success'}
 }
 ...
 ```
