@@ -1,5 +1,5 @@
 # Simple validator for html forms
-[Demo link](http://maplemap.github.io/form-validator-module/)
+[Live Demo](http://maplemap.github.io/form-validator-module/)
 
 ## Usage
 
