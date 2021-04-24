@@ -1,3 +1,5 @@
+[Demo](http://maplemap.github.io/form-validator-module/)
+
 ## Usage
 
 - Add to page
